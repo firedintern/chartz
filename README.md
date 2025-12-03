@@ -124,6 +124,34 @@ cd apps/mobile
 npm run build
 ```
 
+## Deployment
+
+### Deploying to Vercel
+
+The web app is configured for easy deployment to Vercel:
+
+1. **Import your repository**:
+   - Go to [vercel.com](https://vercel.com)
+   - Click "Add New Project"
+   - Import `firedintern/chartz` from GitHub
+
+2. **Configure the project**:
+   - Vercel will automatically detect the monorepo structure
+   - The build settings are configured in `vercel.json`
+
+3. **Set environment variables** in Vercel dashboard:
+   ```
+   DATABASE_URL=your_neon_database_url
+   AUTH_SECRET=your_auth_secret
+   CRYPTO_API_KEY=your_crypto_api_key (if needed)
+   ```
+
+4. **Deploy**:
+   - Click "Deploy"
+   - Your app will be live at `https://your-project.vercel.app`
+
+**Note**: Since this uses React Router v7 with server-side rendering, make sure your Vercel project is configured to handle Node.js runtime.
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
