@@ -1,30 +1,30 @@
-# Use Node.js 20 Alpine image
-FROM node:20-alpine AS base
+# Use Bun image
+FROM oven/bun:1 AS base
 
-# Install dependencies only when needed
+# Install dependencies
 FROM base AS deps
 WORKDIR /app
-COPY apps/web/package*.json ./
-RUN npm ci
+COPY apps/web/package.json apps/web/bun.lock ./
+RUN bun install --frozen-lockfile
 
 # Build the application
 FROM base AS builder
 WORKDIR /app
 COPY apps/web ./
 COPY --from=deps /app/node_modules ./node_modules
-RUN npm run build
+RUN bun run build
 
-# Production image
-FROM base AS runner
+# Production image - use Node.js for running the server
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
 
 # Copy built application
 COPY --from=builder /app/build ./build
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["node_modules/.bin/react-router-serve", "./build/server/index.js"]
