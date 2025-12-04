@@ -5,7 +5,7 @@ FROM oven/bun:1 AS base
 FROM base AS deps
 WORKDIR /app
 COPY apps/web/package.json apps/web/bun.lock ./
-RUN bun install --frozen-lockfile
+RUN bun install
 
 # Build the application
 FROM base AS builder
