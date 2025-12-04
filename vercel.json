@@ -1,12 +1,25 @@
 {
+  "version": 2,
   "buildCommand": "cd apps/web && npm run build",
-  "outputDirectory": "apps/web/build/client",
   "installCommand": "cd apps/web && npm install",
-  "framework": null,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/(.*)",
-      "destination": "/apps/web"
+      "src": "apps/web/build/server/index.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "apps/web/build/client/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/build/client/(.*)",
+      "dest": "/apps/web/build/client/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/apps/web/build/server/index.js"
     }
   ]
 }
